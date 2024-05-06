@@ -1,0 +1,699 @@
+schema {
+  query: ReportingEngineQuery
+}
+
+type ReportingEngineQuery {
+  # List information of existing databases in the Report Engine instance. This list includes also non Report Engine databases
+  databases: [Database]
+
+  # List of used languages in the Report Engine database.
+  languages(
+    # Name of the selected database.
+    database: String!
+  ): [Language]
+
+  # List of existing alarm event classes.
+  alarmEventClasses(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for alarm event group/class numbers. e.g [1,2]
+    numbers: [Int]
+
+    # Optional filter for object names with wildcard * and ?.
+    name: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [AlarmEventClass]
+
+  # List of existing alarm event groups.
+  alarmEventGroups(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for alarm event group/class numbers. e.g [1,2]
+    numbers: [Int]
+
+    # Optional filter for object names with wildcard * and ?.
+    name: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [AlarmEventGroup]
+
+  # Logical tree of existing equipment models and groups.
+  equipmentGroups(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for object guids.
+    guids: [String]
+
+    # Optional filter for object names with wildcard * and ?.
+    name: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter for equipment. Groups only under this model guids.
+    models: [String]
+
+    # Optional filter for equipment. Groups only under this parent guids.
+    parents: [String]
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [EquipmentGroup]
+
+  # List of existing projects.
+  projects(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for object names with wildcard * and ?.
+    name: String
+
+    # Optional filter for object display name with wildcard * and ?.
+    displayName: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [Project]
+
+  # List of existing variables.
+  variables(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for object names with wildcard * and ?.
+    name: String
+
+    # Optional filter for object display name with wildcard * and ?.
+    displayName: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter for unit with wildcard * and ?.
+    unit: String
+
+    # Optional filter for resources label with wildcard * and ?.
+    resourcesLabel: String
+
+    # Optional filter for identification with wildcard * and ?.
+    identification: String
+
+    # Optional filter for variable data types.
+    dataTypes: [VariableDataType]
+
+    # Optional filter find variables over linked meanings wildcard * and ?.
+    meaning: String
+
+    # Optional filter find variables which matching exactly this project names.
+    projects: [String]
+
+    # Optional filter find linked variables to equipmemt groups wthic matching exactly this equipmemt guids.
+    equipmentGroups: [String]
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [Variable]
+
+  # List of existing archives.
+  archives(
+    # Name of the selected database.
+    database: String!
+
+    # Optional filter for archive short name with wildcard * and ?.
+    shortName: String
+
+    # Optional filter for archive long name with wildcard * and ?.
+    longName: String
+
+    # Optional filter for object description with wildcard * and ?.
+    description: String
+
+    # Optional filter for archive cycle times. Exact matsches
+    cycleTimes: [Int]
+
+    # Optional filter for getting ony Lot archive.
+    isLotArchive: Boolean
+
+    # Optional filter find archvies which matching exactly this project names.
+    projects: [String]
+
+    # Optional filter find linked archives to equipmemt groups wthic matching exactly this equipmemt guids.
+    equipmentGroups: [String]
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [Archive]
+
+  # Return online archive data.
+  archiveData(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Short name of the Service Engine archive
+    archive: String!
+
+    # Optional filter over Array of Service Engine variable names
+    variables: [String]
+
+    # Optional filter for archive calculation. RawValue, Sum, Average, Minimum and Maximum.  If not set: All calcuation types.
+    calculation: CalculationType
+
+    # Filter start time
+    startTime: DateTime!
+
+    # Filter end time
+    endTime: DateTime!
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [ArchiveValue]
+
+  # Return lot archive data.
+  lotData(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Short name of the Service Engine archive
+    archive: String!
+
+    # Filter start time
+    startTime: DateTime!
+
+    # Filter end time
+    endTime: DateTime!
+  ): [Lot]
+
+  # Return shift data.
+  shiftData(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Equipment idendification.
+    equipmentIdendification: String!
+
+    # Include breaks. yes = true no = false
+    includeBreaks: Boolean!
+
+    # Filter start time
+    startTime: DateTime!
+
+    # Filter end time
+    endTime: DateTime!
+  ): [Shift]
+
+  # Return Service Engine context list.
+  contextList(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [ContextListEntry]
+
+  # Return Service Engine alarm data.
+  alarmData(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Optional filter for variable names.
+    variableNames: [String]
+
+    # Optional filter for alarm class numbers.
+    alarmClasses: [Int]
+
+    # Optional filter for alarm groups numbers.
+    alarmGroups: [Int]
+
+    # Optional filter for alarm causes id (Guid).
+    alarmCauses: [Guid]
+
+    # Filter start time
+    startTime: DateTime!
+
+    # Filter end time
+    endTime: DateTime!
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [Alarm]
+
+  # Return Service Engine event data.
+  eventData(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Optional filter for variable names.
+    variableNames: [String]
+
+    # Optional filter for alarm class numbers.
+    alarmClasses: [Int]
+
+    # Optional filter for alarm groups numbers.
+    alarmGroups: [Int]
+
+    # Optional filter for alarm causes id (Guid).
+    alarmCauses: [Guid]
+
+    # Filter start time
+    startTime: DateTime!
+
+    # Filter end time
+    endTime: DateTime!
+
+    # Optional filter if events form variabales listed in medadata should be included. Default = true
+    includeFilteredEvents: Boolean
+
+    # Optional filter if events from variables NOT listed in metadata should be included. Default = true
+    includeEventsForNotExportedVariables: Boolean
+
+    # Optional filter if system events should be included. Default = true
+    includeSystemEvents: Boolean
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [Event]
+
+  # Return Service current variable value.
+  currentVariableValue(
+    # Name of the selected database.
+    database: String!
+
+    # Name of the Service Engine project
+    project: String!
+
+    # Name of the Report Engine connector. Default: 'AutomaticConnector' connector
+    connector: ConnectorType = AutomaticConnector
+
+    # Array of Service Engine variable names
+    variableNames: [String]!
+
+    # Optional filter Service Engine language in ISO-639-1 format.
+    language: String
+  ): [CurrentVariableValue]
+}
+
+# General database information
+type Database {
+  # Name of the database.
+  name: String!
+}
+
+# General language information
+type Language {
+  # Service Engine language name.
+  name: String!
+
+  # Language code ISO-639-1.
+  code: String!
+}
+
+# Service Engine Alarm event class
+type AlarmEventClass {
+  # Service Engine alarm event class number.
+  number: Int!
+
+  # Name of the alarm event class.
+  name: String!
+
+  # Description of the alarm event class.
+  description: String!
+}
+
+# Service Engine Alarm event group
+type AlarmEventGroup {
+  # Service Engine alarm event group number.
+  number: Int!
+
+  # Name of the alarm event group.
+  name: String!
+
+  # Description of the alarm event group.
+  description: String!
+}
+
+# Service Engine Equipment group
+type EquipmentGroup {
+  # Service Engine equipment guid.
+  guid: String!
+
+  # Name of the equipment group.
+  name: String!
+
+  # Description of the equipment group.
+  description: String!
+
+  # Child equipment groups.
+  childEquipmentGroups: [EquipmentGroup]
+
+  # Linked archives to the equipment group
+  linkedArchives: [Archive]
+
+  # Linked variable to the equipment group.
+  linkedVariables: [Variable]
+}
+
+# Archive information
+type Archive {
+  # Archive short name.
+  shortName: String!
+
+  # Archive long name.
+  longName: String!
+
+  # Archive description.
+  description: String!
+
+  # Cycle time of the archive.
+  cycleTime: Int!
+
+  # Set if archive is a lot archive.
+  isLotArchive: Boolean!
+
+  # Aggregated archives.
+  aggregatedArchives: [Archive]
+
+  # Variables informatio of the archive.
+  variables: [ArichiveVariable]
+}
+
+# Archive variable information
+type ArichiveVariable {
+  # Archive calculation type of the variable.
+  calculation: CalculationType
+
+  # Variable information.
+  variable: Variable
+}
+
+enum CalculationType {
+  RawValue
+  Sum
+  Average
+  Minimum
+  Maximum
+}
+
+# Service Engine variable information
+type Variable {
+  # Reference name of the variable.
+  variableName: String!
+
+  # Display name of the variable.
+  displayName: String!
+
+  # Description of the variable.
+  description: String!
+
+  # Unit of the variable.
+  measuringUnit: String!
+
+  # Resource label of the variable.
+  resourcesLabel: String!
+
+  # Identification of the variable.
+  identification: String!
+
+  # Data type of the variable.
+  dataType: VariableDataType
+
+  # Report Engine meanings of the variable.
+  meanings: [String]
+}
+
+enum VariableDataType {
+  Bool
+  Numeric
+  String
+}
+
+# Service Engine project information
+type Project {
+  # Name of the project.
+  name: String!
+
+  # Display name of the project.
+  displayName: String!
+
+  # Description of the project.
+  description: String!
+
+  # Report Engine variables of the project.
+  variables: [Variable]
+
+  # Report Engine archives of the project.
+  archives: [Archive]
+}
+
+# Service Engine archive value
+type ArchiveValue {
+  # Calcuation type of the archive value.
+  calculation: CalculationType
+
+  # Numeric value of the archive value.
+  numericValue: Float
+
+  # String value of the archive value.
+  stringValue: String
+
+  # Status flag of the archive value.
+  statusFlags: Long!
+
+  # Timestamp of the archive value.
+  timestamp: DateTime!
+
+  # Variable information.
+  variable: Variable
+}
+
+scalar Long
+
+# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar DateTime
+
+enum ConnectorType {
+  ServiceEngineConnector
+  SqlConnector
+  ServiceGridDataStorageConnector
+  AutomaticConnector
+}
+
+# Service Engine archive lot value
+type Lot {
+  # Name of the lot archive.
+  name: String!
+
+  # Start time of the lot archive.
+  start: DateTime!
+
+  # End time of the lot archive.
+  end: DateTime!
+}
+
+# Service Engine shift value
+type Shift {
+  # Name of the shift.
+  name: String!
+
+  # Start time of the shift.
+  start: DateTime!
+
+  # End time of the shift.
+  end: DateTime!
+
+  # Breaks of the shift.
+  breaks: [Shift]
+}
+
+# Service Engine context list entry
+type ContextListEntry {
+  # Content of the context list entry.
+  content: ContextListEntryContent
+
+  # Children of the context list entry
+  children: [ContextListEntry]
+}
+
+# Service Engine context list entry content
+type ContextListEntryContent {
+  # Guid of the context list entry.
+  id: ID!
+
+  # Name of the context list entry.
+  name: String!
+
+  # Description of the context list entry.
+  description: String!
+
+  # Information if the ContextListEntry is removed.
+  removed: Boolean!
+}
+
+# Service Engine alarm data
+type Alarm {
+  # Variable information of the alarm.
+  variable: Variable
+
+  # Alarm class information of the alarm.
+  alarmClass: AlarmEventClass
+
+  # Alarm group information of the alarm.
+  alarmGroup: AlarmEventGroup
+
+  # Time alarm comes.
+  timeComes: DateTime!
+
+  # Time alarm goes.
+  timeGoes: DateTime
+
+  # Time acknowledged alarm.
+  timeAcknowledged: DateTime
+
+  # Time reactiveted alarm.
+  timeReactivated: DateTime
+
+  # Reactiveted count.
+  countReactivated: Int!
+
+  # Name of the user.
+  userName: String!
+
+  # Name of the computer.
+  computerName: String!
+
+  # Alarm text.
+  alarmText: String!
+
+  # Alarm value.
+  value: Float!
+
+  # Status flags.
+  statusFlags: Long!
+
+  # User comment.
+  comment: String!
+
+  # Alarm cause information.
+  alarmCause: AlarmCause
+}
+
+# Alarm cause information
+type AlarmCause {
+  # Alarm cause level 1
+  level1: ContextListEntryContent
+
+  # Alarm cause level 2
+  level2: ContextListEntryContent
+
+  # Alarm cause level 3
+  level3: ContextListEntryContent
+
+  # Alarm cause level 4
+  level4: ContextListEntryContent
+
+  # Alarm cause level 5
+  level5: ContextListEntryContent
+}
+
+scalar Guid
+
+# Service Engine event data
+type Event {
+  # Variable information of the event.
+  variable: Variable
+
+  # Event class information of the event.
+  eventClass: AlarmEventClass
+
+  # Event group information of the event.
+  eventGroup: AlarmEventGroup
+
+  # Time event comes.
+  timeComes: DateTime!
+
+  # Name of the user.
+  userName: String!
+
+  # Name of the computer.
+  computerName: String!
+
+  # Event text.
+  eventText: String!
+
+  # Event value.
+  value: Float!
+
+  # Status flags.
+  statusFlags: Long!
+
+  # User comment.
+  comment: String!
+}
+
+# Service Engine current variable value
+type CurrentVariableValue {
+  # Variable information of the variable.
+  variable: Variable
+
+  # Numeric value when variable is not a string.
+  numericValue: Float
+
+  # String value when varible is a string
+  stringValue: String!
+
+  # Status flags.
+  statusFlags: Long!
+
+  # Timestamp of the variable.
+  timestamp: DateTime!
+}
