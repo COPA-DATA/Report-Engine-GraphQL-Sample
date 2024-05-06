@@ -11,7 +11,7 @@ The sample contains 2 projects:
 
 `GraphQL_CLI` contains the worker class for doing GraphQL requests via the NuGet package `GraphQL.Client` and a program routine that acquires the required access token and triggers the GraphQL queries.
 
-the projects have been developed using .NET 6 and Microsoft Visual Studio 2022. You may either have to install this IDE and SDK or change the project so that you can open it in an IDE of your choice or use a different .NET version.
+the projects have been developed using .NET 8 and Microsoft Visual Studio 2022. You may either have to install this IDE and SDK or change the project so that you can open it in an IDE of your choice or use a different .NET version.
 
 # Prerequisites for Running the Sample
 
